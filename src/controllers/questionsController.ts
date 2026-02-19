@@ -1,4 +1,4 @@
-import questions from "../services/questions.js";
+import questions from "../services/questions.ts";
 import express from "express";
 
 const getQuestions = async (req: express.Request, res: express.Response) => {
@@ -32,10 +32,11 @@ const getQuestions = async (req: express.Request, res: express.Response) => {
 
     const response = await questions(params);
     const data = await response.json();
+    // console.log(data);
     res.status(200).json(data);
   } catch (error:any) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export default getQuestions;    
+export { getQuestions };    
