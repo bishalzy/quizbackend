@@ -5,16 +5,17 @@ import { questionsConfig } from "./questionsConfig.ts";
 
 
 
-interface Question {
+interface QuestionRequest {
   noofQuestion?: number;
   category?: number;
   difficulty?: string;
   type?: string;
 }
 
-const questions = (Question: Question) => {
+const questions = (Question: QuestionRequest) => {
   const { noofQuestion,category, difficulty, type } = Question;
-  const totalQuestion = noofQuestion || 10;
+  const totalQuestion = noofQuestion || 4;
+  const defaultType = type || "multiple";
 
   if (category && !questionsConfig.category.includes(category)) {
     throw new Error("Invalid category");
@@ -28,9 +29,9 @@ const questions = (Question: Question) => {
   // console.log(process.env.BASE_QUESTION_URL);
   const baseUrl = process.env.BASE_QUESTION_URL || "https://opentdb.com/api.php?amount=";
 
-  const url=`${baseUrl}${totalQuestion}${category?`&category=${category}`:""}${difficulty?`&difficulty=${difficulty}`:""}${type?`&type=${type}`:""}`;
+  const url=`${baseUrl}${totalQuestion}${category?`&category=${category}`:""}${difficulty?`&difficulty=${difficulty}`:""}${`&type=${defaultType}`}`;
 
-  
+  console.log(url);
   return fetch(url);
 
 };

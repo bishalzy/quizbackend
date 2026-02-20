@@ -1,5 +1,25 @@
 import questions from "../services/questions.ts";
 import express from "express";
+import { Response } from "node-fetch";
+
+
+type Question = {
+  type: "multiple" | "boolean"; 
+  difficulty: "easy" | "medium" | "hard";
+  category: string;
+  question: string;
+  correct_answer: string;
+  incorrect_answers: string[];
+};
+
+type QuestionsResponse = {
+  response_code: number;
+  results: Question[];
+};  
+
+
+
+
 
 const getQuestions = async (req: express.Request, res: express.Response) => {
   try {
@@ -30,8 +50,8 @@ const getQuestions = async (req: express.Request, res: express.Response) => {
     if (difficulty !== undefined) params.difficulty = difficulty;
     if (type !== undefined) params.type = type;
 
-    const response = await questions(params);
-    const data = await response.json();
+    const response:Response = await questions(params);
+    const data = await response.json() as QuestionsResponse;
     // console.log(data);
     res.status(200).json(data);
   } catch (error:any) {
