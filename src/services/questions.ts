@@ -1,16 +1,9 @@
 import fetch from "node-fetch";
 
 import { questionsConfig } from "./questionsConfig.ts";
+import type { QuestionRequest }  from "../utils/types/questionTypes.ts";
 
 
-
-
-interface QuestionRequest {
-  noofQuestion?: number;
-  category?: number;
-  difficulty?: string;
-  type?: string;
-}
 
 const questions = (Question: QuestionRequest) => {
   const { noofQuestion,category, difficulty, type } = Question;

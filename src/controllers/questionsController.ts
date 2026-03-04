@@ -1,21 +1,9 @@
 import questions from "../services/questions.ts";
+import type { QuestionsResponse, QuestionRequest } from "../utils/types/questionTypes.ts";
 import express from "express";
 import { Response } from "node-fetch";
 
 
-type Question = {
-  type: "multiple" | "boolean"; 
-  difficulty: "easy" | "medium" | "hard";
-  category: string;
-  question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
-};
-
-type QuestionsResponse = {
-  response_code: number;
-  results: Question[];
-};  
 
 
 
@@ -44,7 +32,7 @@ const getQuestions = async (req: express.Request, res: express.Response) => {
     const difficulty = asSingleString(req.query.difficulty);
     const type = asSingleString(req.query.type);
 
-    const params: { noofQuestion?: number; category?: number; difficulty?: string; type?: string } = {};
+    const params: QuestionRequest = {};
     if (noofQuestion !== undefined) params.noofQuestion = noofQuestion;
     if (category !== undefined) params.category = category;
     if (difficulty !== undefined) params.difficulty = difficulty;
