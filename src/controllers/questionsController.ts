@@ -44,6 +44,8 @@ const getQuestions = async (req: express.Request, res: express.Response) => {
     res.status(200).json(data);
   } catch (error:any) {
     res.status(500).json({ error: error.message });
+  } finally {
+    console.log( "Request completed for getQuestions" );
   }
 };
 
