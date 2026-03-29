@@ -1,5 +1,5 @@
 import express from "express";
-import {getQuestions} from "../controllers/questionsController.ts";
+import {getQuestions} from "../controllers/questionsController.js";
 const questionsRoute = express.Router();
 
 questionsRoute.route('/api/questions').get(getQuestions);

@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
-import questionRoute from "./routes/questionsRoute.ts";
+import questionRoute from "./routes/questionsRoute.js";
 dotenv.config();
 
 const app = express();

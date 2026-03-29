@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 
-import { questionsConfig } from "./questionsConfig.ts";
-import type { QuestionRequest }  from "../utils/types/questionTypes.ts";
+import { questionsConfig } from "./questionsConfig.js";
+import type { QuestionRequest }  from "../utils/types/questionTypes.js";
 
 
 

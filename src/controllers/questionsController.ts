@@ -1,5 +1,5 @@
-import questions from "../services/questions.ts";
-import type { QuestionsResponse, QuestionRequest } from "../utils/types/questionTypes.ts";
+import questions from "../services/questions.js";
+import type { QuestionsResponse, QuestionRequest } from "../utils/types/questionTypes.js";
 import express from "express";
 import { Response } from "node-fetch";
 
