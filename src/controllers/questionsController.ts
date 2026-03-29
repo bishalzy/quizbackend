@@ -40,7 +40,7 @@ const getQuestions = async (req: express.Request, res: express.Response) => {
 
     const response:Response = await questions(params);
     const data = await response.json() as QuestionsResponse;
-    // console.log(data);
+    console.log(data.results);
     res.status(200).json(data);
   } catch (error:any) {
     res.status(500).json({ error: error.message });

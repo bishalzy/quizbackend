@@ -24,7 +24,6 @@ const questions = (Question: QuestionRequest) => {
 
   const url=`${baseUrl}${totalQuestion}${category?`&category=${category}`:""}${difficulty?`&difficulty=${difficulty}`:""}${`&type=${defaultType}`}`;
 
-  console.log(url);
   return fetch(url);
 
 };
