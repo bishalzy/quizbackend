@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-import { questionsConfig } from "./questionsConfig.js";
+import { questionsConfig } from "../utils/config/questionsConfig.js";
 import type { QuestionRequest }  from "../utils/types/questionTypes.js";
 
 
@@ -20,9 +20,9 @@ const questions = (Question: QuestionRequest) => {
     throw new Error("Invalid type");
   }
   // console.log(process.env.BASE_QUESTION_URL);
-  const baseUrl = process.env.BASE_QUESTION_URL || "https://opentdb.com/api.php?amount=";
+  const baseUrl = process.env.BASE_QUESTION_URL || "https://opentdb.com/api.php";
 
-  const url=`${baseUrl}${totalQuestion}${category?`&category=${category}`:""}${difficulty?`&difficulty=${difficulty}`:""}${`&type=${defaultType}`}`;
+  const url=`${baseUrl}?amount=${totalQuestion}${category?`&category=${category}`:""}${difficulty?`&difficulty=${difficulty}`:""}${`&type=${defaultType}`}`;
 
   return fetch(url);
 
