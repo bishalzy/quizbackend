@@ -5,7 +5,7 @@ import type { QuestionRequest }  from "../utils/types/questionTypes.js";
 
 
 
-const questions = (Question: QuestionRequest) => {
+const questionsService = (Question: QuestionRequest) => {
   const { noofQuestion,category, difficulty, type } = Question;
   const totalQuestion = noofQuestion || 4;
   const defaultType = type || "multiple";
@@ -28,4 +28,4 @@ const questions = (Question: QuestionRequest) => {
 
 };
 
-export default questions;
+export default questionsService;

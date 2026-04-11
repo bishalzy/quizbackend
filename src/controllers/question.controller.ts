@@ -1,4 +1,4 @@
-import questions from "../services/questions.js";
+import questionsService from "../services/questins.service.js";
 import type { QuestionsResponse, QuestionRequest } from "../utils/types/questionTypes.js";
 import express from "express";
 import { Response } from "node-fetch";
@@ -38,7 +38,7 @@ const getQuestions = async (req: express.Request, res: express.Response) => {
     if (difficulty !== undefined) params.difficulty = difficulty;
     if (type !== undefined) params.type = type;
 
-    const response:Response = await questions(params);
+    const response:Response = await questionsService(params);
     const data = await response.json() as QuestionsResponse;
     console.log(data.results);
     res.status(200).json(data);
