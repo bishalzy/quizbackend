@@ -1,4 +1,4 @@
-import questionsService from "../services/questins.service.js";
+import questionsService from "../services/questions.service.js";
 import type { QuestionsResponse, QuestionRequest } from "../utils/types/questionTypes.js";
 import express from "express";
 import { Response } from "node-fetch";

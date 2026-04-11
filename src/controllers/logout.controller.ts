@@ -1,3 +1,4 @@
+import generalConfig from "../utils/config/general.config.js";
 
 
 const logoutController = (req: any, res: any) => {

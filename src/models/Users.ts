@@ -1,6 +1,6 @@
 
 import pool from "../db/db.js";
-import type { User,Session } from "../utils/types/schema.typs.js";
+import type { User,Session } from "../utils/types/schema.types.js";
 
 export const findOrCreateUser = async (githubToken: string, username: string, email: string): Promise<User> => {
   try {
