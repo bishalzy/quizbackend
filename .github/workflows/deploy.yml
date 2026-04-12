@@ -1,11 +1,13 @@
 name: CI/CD Node-TS
 
 on:
-  push:
+  pull_request:
+    types: closed
     branches: [ "master" ]
-
+    
 jobs:
   build-test-deploy:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-22.04
 
     steps:
