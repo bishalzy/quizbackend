@@ -7,8 +7,20 @@ import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 
+let allowedOrigins: string[] = [];
+if (process.env.MODE === "production") {
+  if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }else{
+    allowedOrigins.push("http://localhost:5173");
+  }
+}
+
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(cookieParser());
 
 app.use(express.json());
