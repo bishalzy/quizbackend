@@ -2,6 +2,7 @@ import generateToken from "../utils/generateToken.js";
 import { getUser, getUserEmail } from "../services/github.service.js";
 import {EndpointsConfig} from "../utils/config/general.config.js";
 import type{GithubTokenResponse} from "../utils/types/githubpayload.types.js";
+import { endianness } from "os";
 
 const githubAuthController = async (req:any, res:any) =>{
     const code = req.query.code;
@@ -66,7 +67,9 @@ const githubAuthController = async (req:any, res:any) =>{
         
 
         res.cookie("token", jwtToken, cookieOptions);
+        console.log(EndpointsConfig.frontendUrl);
         res.redirect(EndpointsConfig.frontendUrl);    // Redirect to frontend after successful authentication
+
     } catch (error) {
         console.error('Error fetching GitHub token:', error);
         res.status(500).json({ error: 'Failed to fetch GitHub token' });
