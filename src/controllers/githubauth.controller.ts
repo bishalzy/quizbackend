@@ -1,8 +1,8 @@
 import generateToken from "../utils/generateToken.js";
 import { getUser, getUserEmail } from "../services/github.service.js";
 import {EndpointsConfig} from "../utils/config/general.config.js";
-import type{GithubTokenResponse} from "../utils/types/githubpayload.types.js";
-import { endianness } from "os";
+import type{GithubTokenResponse} from "../utils/types/githubuserpayload.types.js";
+
 
 const githubAuthController = async (req:any, res:any) =>{
     const code = req.query.code;
