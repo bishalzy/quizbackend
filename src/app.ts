@@ -4,20 +4,20 @@ import dotenv from "dotenv";
 import cors from "cors";
 import questionRoute from "./routes/questionsRoute.js";
 import authRouter from "./routes/authRoutes.js";
+import {EndpointsConfig} from "./utils/config/general.config.js";
 
 dotenv.config();
 const app = express();
 
 let allowedOrigins: string[] = [];
 if (process.env.MODE === "production") {
-  if (process.env.FRONTEND_URL) {
-    allowedOrigins.push(process.env.FRONTEND_URL);
+    allowedOrigins.push(EndpointsConfig.frontendUrl);
     allowedOrigins.push('/\.vercel\.app$/');
 
   } else {
     // dev mode
     allowedOrigins.push("http://localhost:5173");
-  }
+  
 }
 
 app.use(cors({
@@ -40,6 +40,8 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+
 app.use(cookieParser());
 
 app.use(express.json());
