@@ -6,21 +6,39 @@ import questionRoute from "./routes/questionsRoute.js";
 import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
+const app = express();
 
 let allowedOrigins: string[] = [];
 if (process.env.MODE === "production") {
   if (process.env.FRONTEND_URL) {
     allowedOrigins.push(process.env.FRONTEND_URL);
     allowedOrigins.push('/\.vercel\.app$/');
-  }else{
+
+  } else {
+    // dev mode
     allowedOrigins.push("http://localhost:5173");
   }
 }
 
-const app = express();
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    // exact match (main frontend or localhost)
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // allow all Vercel preview deployments
+    if (/\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true, // important if using cookies/auth
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(cookieParser());
 
