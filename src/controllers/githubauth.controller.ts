@@ -1,6 +1,8 @@
-import generateToken from "../utils/generateToken.js";
+
 import { getUser, getUserEmail } from "../services/github.service.js";
 import {EndpointsConfig} from "../utils/config/general.config.js";
+import { generateRefreshToken,generateAccessToken } from "../utils/token/generateToken.js";
+import { findOrCreateUser,createSession } from "../models/Users.js";
 import type{GithubTokenResponse} from "../utils/types/githubuserpayload.types.js";
 
 
@@ -43,31 +45,27 @@ const githubAuthController = async (req:any, res:any) =>{
 
         const accessToken = tokenData.access_token;
         
-        getUser(accessToken).then(user => {
-            console.log('GitHub user data:', user);
-        }).catch(err => {
-            console.error('Error fetching GitHub user data:', err);
-        });
-        
-        getUserEmail(accessToken).then(email => {
-            console.log('GitHub user email:', email);
-        }).catch(err => {
-            console.error('Error fetching GitHub user email:', err);
-        });
-        const jwtToken = generateToken({ accessToken });
+        const user = await getUser(accessToken);
+        const email = await getUserEmail(accessToken);
+
+        const refreshToken = generateRefreshToken();
+        const accessTokenJwt = generateAccessToken({ session_id: refreshToken, user_id: user.id, username: user.login });
+
+        const dbUser = await findOrCreateUser(user.id, user.login,email,user.avatar_url);
+        await createSession(dbUser.id, refreshToken);
+
+        // console.log('Database user:', dbUser);
+        // console.log('session created:', session);
 
         const cookieOptions: any = {
-            httpOnly: true,
-            secure: isProduction,
-            sameSite: "lax"
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax",
+        domain: EndpointsConfig.frontendDomain
         };
 
-
-        cookieOptions.domain = EndpointsConfig.frontendDomain;
-        
-
-        res.cookie("token", jwtToken, cookieOptions);
-        console.log(EndpointsConfig.frontendUrl);
+        res.cookie("access_token", accessTokenJwt, cookieOptions);
+        res.cookie("refresh_token", refreshToken, cookieOptions);
         res.redirect(EndpointsConfig.frontendUrl);    // Redirect to frontend after successful authentication
 
     } catch (error) {

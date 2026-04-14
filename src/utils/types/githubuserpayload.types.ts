@@ -11,5 +11,4 @@ export type userData = {
   login: string;
   id: number;
   avatar_url: string;
-  email: string;
 };

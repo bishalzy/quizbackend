@@ -1,4 +1,4 @@
-
+import type { userData } from "../utils/types/githubuserpayload.types.js";
 
 const getUser = async (token: string) => {
     const userApiUrl = process.env.GITHUB_USER_API_URL || 'https://api.github.com/user';
@@ -14,12 +14,12 @@ const getUser = async (token: string) => {
         throw new Error('Failed to fetch user data');
     }
 
-    const user = await userResponse.json();
+    const {login,id,avatar_url} = await userResponse.json();
 
-    
+    return { login, id, avatar_url };
 };
 
-const getUserEmail = async (token: string) => {
+const getUserEmail = async (token: string):Promise<string> => {
     const emailApiUrl = process.env.GITHUB_EMAILS_API_URL || 'https://api.github.com/user/emails';
     const emailResponse = await fetch(emailApiUrl, {
         method: 'GET',

@@ -1,8 +1,9 @@
 export interface User {
   id: number;
-  github_token: string;
+  github_id: string;
   username: string;
   email: string;
+  avatar_url: string;
   created_at: Date;
 }
 
