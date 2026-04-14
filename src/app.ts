@@ -11,6 +11,7 @@ let allowedOrigins: string[] = [];
 if (process.env.MODE === "production") {
   if (process.env.FRONTEND_URL) {
     allowedOrigins.push(process.env.FRONTEND_URL);
+    allowedOrigins.push('/\.vercel\.app$/');
   }else{
     allowedOrigins.push("http://localhost:5173");
   }
