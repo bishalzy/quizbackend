@@ -9,7 +9,7 @@ on:
     
 jobs:
   build-test-deploy:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-22.04
 
     steps:
