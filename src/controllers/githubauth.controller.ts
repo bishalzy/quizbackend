@@ -1,5 +1,6 @@
 
 import { getUser, getUserEmail } from "../services/github.service.js";
+import { cookieOptions,refreshTokenCookieOptions } from "../utils/config/cookieOption.config.js";
 import {EndpointsConfig} from "../utils/config/general.config.js";
 import { generateRefreshToken,generateAccessToken } from "../utils/token/generateToken.js";
 import { findOrCreateUser,createSession } from "../models/Users.js";
@@ -48,24 +49,13 @@ const githubAuthController = async (req:any, res:any) =>{
         const user = await getUser(accessToken);
         const email = await getUserEmail(accessToken);
 
-        const refreshToken = generateRefreshToken();
-        const accessTokenJwt = generateAccessToken({ session_id: refreshToken, user_id: user.id, username: user.login });
-
         const dbUser = await findOrCreateUser(user.id, user.login,email,user.avatar_url);
-        await createSession(dbUser.id, refreshToken);
-
-        // console.log('Database user:', dbUser);
-        // console.log('session created:', session);
-
-        const cookieOptions: any = {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: "lax",
-        domain: EndpointsConfig.frontendDomain
-        };
+        const refreshToken = generateRefreshToken();
+        const session = await createSession(dbUser.id , refreshToken);
+        const accessTokenJwt = generateAccessToken({ session_id: session.id, user_id: dbUser.id, username: dbUser.username });
 
         res.cookie("access_token", accessTokenJwt, cookieOptions);
-        res.cookie("refresh_token", refreshToken, cookieOptions);
+        res.cookie("refresh_token", refreshToken, refreshTokenCookieOptions);
         res.redirect(EndpointsConfig.frontendUrl);    // Redirect to frontend after successful authentication
 
     } catch (error) {

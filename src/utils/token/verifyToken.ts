@@ -1,9 +1,7 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { findSessionByToken } from '../../models/Users.js';
-import type { User, Session } from '../types/schema.types.js';
+import type { Session } from '../types/schema.types.js';
 import type { decodedJwtAccessTokenPayload } from '../types/general.types.js';
-
-
 
 const verifyAccessToken = async (token: string): Promise<decodedJwtAccessTokenPayload>=> {
 
@@ -22,7 +20,7 @@ const verifyAccessToken = async (token: string): Promise<decodedJwtAccessTokenPa
     }
 };
 
-const verifyRefreshToken = async (token: string) => {
+const verifyRefreshToken = async (token: string): Promise<Session> => {
     
     const session = await findSessionByToken(token);
     if (!session) {

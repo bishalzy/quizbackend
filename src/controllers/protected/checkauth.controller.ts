@@ -1,16 +1,16 @@
 
 
 const checkAuthController = (req:any, res:any) => {
-    const token = req.cookies.token;
+    
 
-    if (!token) {
-        return res.status(401).json({ error: 'Unauthorized' });
+    const user = req.user; // Assuming the user information is stored in req.user by the authentication middleware
+
+    if (!user) {
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    // Here you would typically verify the token and retrieve user information
-    // For example, you could decode the JWT token and check its validity
 
-    res.json({ message: 'Authenticated'});  
+    res.status(200).json(user);  
 }
 
 export default checkAuthController;
