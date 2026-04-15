@@ -1,10 +1,21 @@
+import { findUserById } from "../../models/Users.js";
 
+const profileController = async (req: any, res: any) => {
 
-const profileController = (req: any, res: any) => {
-    // Here you would typically retrieve the user's profile information from the database
-    // For example, you could use the user ID from the authenticated token to fetch the profile data
-
-    res.json({ message: 'User profile data' });  
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    try{
+        const userData = await findUserById(user.id);
+        if(!userData){
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(userData);
+    } catch (error) {
+        console.error('Error in profileController:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 }
 
 export default profileController;

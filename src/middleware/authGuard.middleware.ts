@@ -8,7 +8,7 @@ declare global {
       user?: {
         user_id: number;
         username: string;
-        session_id: string;
+        session_id: number;
       };
     }
   }

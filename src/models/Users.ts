@@ -21,6 +21,20 @@ export const findOrCreateUser = async (github_id: number, username: string,email
     throw error;
   }
 };
+
+export const findUserById = async (id: number): Promise<User | null> => {
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+    if (result.rows.length > 0) {
+      return result.rows[0] as User;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error in findUserById:', error);
+    throw error;
+  }
+};
+
 //TODO need to regenerage the token if collision happens
 export const createSession = async (user_id: number, refresh_token: string): Promise<Session> => {
   try {
