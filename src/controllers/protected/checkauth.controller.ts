@@ -4,11 +4,11 @@ const checkAuthController = async (req:any, res:any) => {
     
 
     const user = req.user;
-
+    console.log('User from authGuardMiddleware:', user);
     if (!user) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
-
+    console.log('User data from authGuardMiddleware:', user);
     const userData = await findUserById(user.user_id);
 
     if (!userData) {
