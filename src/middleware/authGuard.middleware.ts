@@ -1,3 +1,4 @@
+import { ref } from 'process';
 import { verifyAccessToken } from '../utils/token/verifyToken.js';
 import type { decodedJwtAccessTokenPayload } from '../utils/types/general.types.js';
 import type { Request, Response, NextFunction } from 'express';
@@ -17,15 +18,20 @@ declare global {
 
 const authGuardMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   // Implementation for authentication guard middleware
-  const token = req.cookies.access_token;
+  const accessToken = req.cookies.access_token;
+  const refreshToken = req.cookies.refresh_token;
+  console.log('Access token in authGuardMiddleware:', accessToken??'No access token');
+  console.log('Refresh token in authGuardMiddleware:', refreshToken?? 'No refresh token');
 
-  
-  if (!token) {
+  if (!accessToken && !refreshToken) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-  console.log('Token received in authGuardMiddleware:', token);
+  if(!accessToken &&refreshToken){
+    return res.status(498).json({ error: 'Expired access token' });
+  }
+  console.log('Token received in authGuardMiddleware:', accessToken);
   try {
-    const decoded: decodedJwtAccessTokenPayload = await verifyAccessToken(token);
+    const decoded: decodedJwtAccessTokenPayload = await verifyAccessToken(accessToken);
     console.log('Decoded token in authGuardMiddleware:', decoded);
     req.user = {
       user_id: decoded.user_id,
