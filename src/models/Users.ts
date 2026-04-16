@@ -66,9 +66,9 @@ export const findSessionByToken = async (refresh_token: string): Promise<Session
   }
 };
 
-export const deleteSession = async (token: string): Promise<void> => {
+export const deleteSession = async (id: number): Promise<void> => {
   try {
-    await pool.query('DELETE FROM sessions WHERE refresh_token = $1', [token]);
+    await pool.query('DELETE FROM sessions WHERE id = $1', [id]);
   } catch (error) {
     console.error('Error in deleteSession:', error);
     throw error;
