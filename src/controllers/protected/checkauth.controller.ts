@@ -1,16 +1,22 @@
+import { findUserById } from '../../models/Users.js';
 
-
-const checkAuthController = (req:any, res:any) => {
+const checkAuthController = async (req:any, res:any) => {
     
 
-    const user = req.user; // Assuming the user information is stored in req.user by the authentication middleware
+    const user = req.user;
 
     if (!user) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
+    const userData = await findUserById(user.user_id);
 
-    res.status(200).json(user);  
+    if (!userData) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+
+    res.status(200).json(userData);  
 }
 
 export default checkAuthController;

@@ -7,7 +7,7 @@ const verifyAccessToken = async (token: string): Promise<decodedJwtAccessTokenPa
 
 
     // Implementation for verifying access token
-    const secretKey = process.env.JWT_SECRET_KEY;
+    const secretKey = process.env.JWT_SECRET;
     if (!secretKey) {
         throw new Error('JWT secret key is not defined');
     }
