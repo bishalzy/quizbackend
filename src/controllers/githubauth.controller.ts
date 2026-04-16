@@ -11,13 +11,11 @@ const githubAuthController = async (req:any, res:any) =>{
     const code = req.query.code;
 
     if (!code) {
-        return res.status(400).json({ error: "Missing OAuth code. Use /auth/github/callback?code=..." });
+        return res.redirect(EndpointsConfig.frontendUrl);
     }
-
     try{
         const client_id = process.env.GITHUB_CLIENT_ID;
         const client_secret = process.env.GITHUB_CLIENT_SECRET;
-        const isProduction = process.env.MODE === "production";
 
         if (!client_id || !client_secret) {
             return res.status(500).json({ error: 'Missing GitHub OAuth configuration' });
