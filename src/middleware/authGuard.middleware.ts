@@ -19,13 +19,14 @@ const authGuardMiddleware = async (req: Request, res: Response, next: NextFuncti
   // Implementation for authentication guard middleware
   const token = req.cookies.access_token;
 
+  
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-
+  console.log('Token received in authGuardMiddleware:', token);
   try {
     const decoded: decodedJwtAccessTokenPayload = await verifyAccessToken(token);
-
+    console.log('Decoded token in authGuardMiddleware:', decoded);
     req.user = {
       user_id: decoded.user_id,
       username: decoded.username,
