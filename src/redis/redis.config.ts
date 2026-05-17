@@ -1,7 +1,8 @@
-import redisClient from "./redis.js"
+import redisClient from "./redisClient.js"
+import type {QuestionsResponse} from "../utils/types/questionTypes.js";
 
 const redisConfig = {
-    setValue: async (key: string, value: string | number, expirationInSeconds?: number) => {
+    setValue: async (key: string, value: string | number | QuestionsResponse, expirationInSeconds?: number) => {
         try {
             const stringValue = String(value);
             if (expirationInSeconds) {

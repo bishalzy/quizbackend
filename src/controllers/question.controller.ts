@@ -40,12 +40,12 @@ const getQuestions = async (req: express.Request, res: express.Response) => {
 
     const response:Response = await questionsService(params);
     const data = await response.json() as QuestionsResponse;
-    console.log(data.results);
+    // console.log(data.results);
     res.status(200).json(data);
   } catch (error:any) {
     res.status(500).json({ error: error.message });
   } finally {
-    console.log( "Request completed for getQuestions" );
+    // console.log( "Request completed for getQuestions" );
   }
 };
 
