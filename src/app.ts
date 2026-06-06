@@ -41,7 +41,7 @@ app.use(cors({
 app.use(cookieParser());
 
 app.use(express.json());
-app.use(apiMetricsMiddleware);
+// app.use(apiMetricsMiddleware);
 app.use('/api',questionRoute);
 app.use('/auth',authRouter);
 app.use('/user',authGuardMiddleware,profileRouter);
