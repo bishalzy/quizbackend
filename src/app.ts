@@ -7,6 +7,8 @@ import authRouter from "./routes/authRoutes.js";
 import profileRouter from "./routes/protected/profile.routes.js";
 import authGuardMiddleware from "./middleware/authGuard.middleware.js";
 import {EndpointsConfig} from "./utils/config/general.config.js";
+import {apiMetricsMiddleware} from "./middleware/metrics.middleware.js";
+import getMetrics from "./controllers/metrics.controller.js";
 
 dotenv.config();
 const app = express();
@@ -39,11 +41,13 @@ app.use(cors({
 app.use(cookieParser());
 
 app.use(express.json());
+// app.use(apiMetricsMiddleware);
 app.use('/api',questionRoute);
 app.use('/auth',authRouter);
 app.use('/user',authGuardMiddleware,profileRouter);
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
+app.get('/metrics', getMetrics);
 
 export default app;

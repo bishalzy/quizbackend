@@ -1,4 +1,5 @@
-import app from './app.js';
+// import app from './app.js';
+import server from './socket.js';
 // import initializeDatabase from './db/init.js';
 
 
@@ -10,6 +11,6 @@ import app from './app.js';
 //   process.exit(1);
 // }
 
-app.listen(process.env.PORT || 5000, () => {
+server.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running on port ${process.env.PORT || 5000}`);
 });

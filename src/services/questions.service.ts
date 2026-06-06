@@ -1,11 +1,11 @@
 import fetch from "node-fetch";
 
 import { questionsConfig } from "../utils/config/questionsConfig.js";
-import type { QuestionRequest }  from "../utils/types/questionTypes.js";
+import type { QuestionRequest,QuestionsResponse }  from "../utils/types/questionTypes.js";
 
 
 
-const questionsService = (Question: QuestionRequest) => {
+const questionsService = (Question: QuestionRequest)=> {
   const { noofQuestion,category, difficulty, type } = Question;
   const totalQuestion = noofQuestion || 10;
   const defaultType = type || "multiple";
