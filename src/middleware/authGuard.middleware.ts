@@ -20,8 +20,8 @@ const authGuardMiddleware = async (req: Request, res: Response, next: NextFuncti
   // Implementation for authentication guard middleware
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
-  console.log('Access token in authGuardMiddleware:', accessToken??'No access token');
-  console.log('Refresh token in authGuardMiddleware:', refreshToken?? 'No refresh token');
+  // console.log('Access token in authGuardMiddleware:', accessToken??'No access token');
+  // console.log('Refresh token in authGuardMiddleware:', refreshToken?? 'No refresh token');
 
   if (!accessToken && !refreshToken) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -29,10 +29,10 @@ const authGuardMiddleware = async (req: Request, res: Response, next: NextFuncti
   if(!accessToken &&refreshToken){
     return res.status(498).json({ error: 'Expired access token' });
   }
-  console.log('Token received in authGuardMiddleware:', accessToken);
+  // console.log('Token received in authGuardMiddleware:', accessToken);
   try {
     const decoded: decodedJwtAccessTokenPayload = await verifyAccessToken(accessToken);
-    console.log('Decoded token in authGuardMiddleware:', decoded);
+    // console.log('Decoded token in authGuardMiddleware:', decoded);
     req.user = {
       user_id: decoded.user_id,
       username: decoded.username,

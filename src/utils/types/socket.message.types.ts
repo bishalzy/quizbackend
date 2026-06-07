@@ -1,63 +1,78 @@
-export type socketEvent = "gameStart" | "gameEnd" | "playerJoined" | "playerLeft" | "newQuestion" | "answerResult" | "createRoom" | "joinRoom" | "leaveRoom";
+export type ClientSocketEvent =
+  | 'room:create'
+  | 'room:join'
+  | 'room:ready'
+  | 'room:leave'
+  | 'game:start'
+  | 'game:answer'
+  | 'room:get'
+  | 'ping';
 
-type GameStartPayload = {
-  gameId: string;
-  players: string[];
+export type ServerSocketEvent =
+  | 'room:created'
+  | 'room:joined'
+  | 'room:state'
+  | 'room:updated'
+  | 'game:started'
+  | 'game:question'
+  | 'game:result'
+  | 'game:ended'
+  | 'error'
+  | 'pong';
+
+export type CreateRoomPayload = {
+  minPlayers?: number;
+  maxPlayers?: number;
+  questionCount?: number;
+  questionTimeoutMs?: number;
+  category?: number;
+  difficulty?: string;
+  type?: string;
 };
 
-type GameEndPayload = {
-  gameId: string;
-  winner: string;
+export type JoinRoomPayload = {
+  roomCode: string;
 };
 
-type PlayerJoinedPayload = {
-  gameId: string;
-  playerId: number;
+export type ReadyRoomPayload = {
+  roomCode: string;
+  ready: boolean;
 };
 
-type PlayerLeftPayload = {
-  gameId: string;
-  playerId: number;
+export type LeaveRoomPayload = {
+  roomCode?: string;
 };
 
-type NewQuestionPayload = {
-  gameId: number;
-  question: string;
+export type StartGamePayload = {
+  roomCode: string;
 };
 
-type AnswerPayload = {
-  gameId: number;
-  playerId: number;
-  selectedAnswer: number;
+export type SubmitAnswerPayload = {
+  roomCode: string;
+  answer: string;
 };
 
-type CreateRoomPayload = {
-  playerId: number;
+export type GetRoomPayload = {
+  roomCode?: string;
 };
 
-type JoinRoomPayload = {
-  roomId: number;
-  playerId: number;
+export type ClientPayloadMap = {
+  'room:create': CreateRoomPayload;
+  'room:join': JoinRoomPayload;
+  'room:ready': ReadyRoomPayload;
+  'room:leave': LeaveRoomPayload;
+  'game:start': StartGamePayload;
+  'game:answer': SubmitAnswerPayload;
+  'room:get': GetRoomPayload;
+  'ping': Record<string, never>;
 };
 
-type LeaveRoomPayload = {
-  roomId: number;
-  playerId: number;
-}
-
-type PayloadMap = {
-  gameStart: GameStartPayload;
-  gameEnd: GameEndPayload;
-  playerJoined: PlayerJoinedPayload;
-  playerLeft: PlayerLeftPayload;
-  newQuestion: NewQuestionPayload;
-  answerResult: AnswerPayload;
-  createRoom: CreateRoomPayload;
-  joinRoom: JoinRoomPayload;
-  leaveRoom: LeaveRoomPayload;
+export type SocketMessage<TEvent extends ClientSocketEvent = ClientSocketEvent> = {
+  event: TEvent;
+  payload: ClientPayloadMap[TEvent];
 };
 
-export type SocketMessage = {
-  event: socketEvent;
-  payload: PayloadMap[socketEvent];
+export type ServerSocketMessage = {
+  event: ServerSocketEvent;
+  payload: Record<string, unknown>;
 };

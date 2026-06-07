@@ -14,7 +14,7 @@ const redisConfig = {
             console.error(`Error setting value in Redis for key ${key}:`, error);
         }
     },
-    getValue: async (key: string): Promise<string | null> => {
+    getValue: async (key: string): Promise<string | number | QuestionsResponse | null> => {
         try {
             const value = await redisClient.get(key);
             return value;

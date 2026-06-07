@@ -7,7 +7,7 @@ const refreshController = async (req: any, res: any) => {
 
     try{
         const refreshToken = req.cookies.refresh_token;
-        console.log('Refresh token received in refreshController:', refreshToken??'No refresh token');
+        // console.log('Refresh token received in refreshController:', refreshToken??'No refresh token');
         if (!refreshToken) {
             return res.status(400).json({ error: 'No refresh token provided' });
         }
@@ -25,7 +25,7 @@ const refreshController = async (req: any, res: any) => {
         res.status(200).json({ message: 'Access token refreshed successfully' });
 
     } catch (error) {
-        console.error('Error in refreshController:', error);
+        // console.error('Error in refreshController:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 

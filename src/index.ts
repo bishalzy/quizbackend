@@ -1,5 +1,6 @@
 // import app from './app.js';
 import server from './socket.js';
+import { startMultiplayerCleanup } from './multiplayerSocket/services/cleanup.service.js';
 // import initializeDatabase from './db/init.js';
 
 
@@ -10,6 +11,8 @@ import server from './socket.js';
 //   console.error("Error initializing database:", error);
 //   process.exit(1);
 // }
+
+startMultiplayerCleanup();
 
 server.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running on port ${process.env.PORT || 5000}`);
