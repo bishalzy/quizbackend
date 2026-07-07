@@ -171,8 +171,8 @@ const handleClientMessage = async (socket: WebSocket, identity: SocketUserIdenti
         throw new Error('Not enough connected players');
       }
 
-      if (connectedPlayers.some((player) => !player.ready)) {
-        throw new Error('All connected players must be ready');
+      if (connectedPlayers.some((player) => player.userId !== room.hostUserId && !player.ready)) {
+        throw new Error('All other connected players must be ready');
       }
 
       const startedRoom = await startGame(payload.roomCode);

@@ -119,7 +119,7 @@ const createInitialRoom = (
     updatedAt: timestamp,
     lastActivityAt: timestamp,
     minPlayers: settings?.minPlayers ?? 2,
-    maxPlayers: settings?.maxPlayers ?? 8,
+    maxPlayers: settings?.maxPlayers ?? 2,
     questionCount: settings?.questionCount ?? 10,
     questionTimeoutMs: settings?.questionTimeoutMs ?? 15000,
     currentQuestionIndex: 0,
@@ -141,7 +141,7 @@ const createInitialRoom = (
     },
     currentQuestionAnswers: {},
     questionHistory: [],
-    ...(settings?.category !== undefined ? { category: settings.category } : {}),
+    category: 18,
     ...(settings?.difficulty !== undefined ? { difficulty: settings.difficulty } : {}),
     ...(settings?.type !== undefined ? { type: settings.type } : {}),
   };
@@ -493,7 +493,7 @@ const deleteRoom = async (roomCode: string): Promise<void> => {
 
 const hasAllConnectedPlayersReady = (room: RoomState): boolean => {
   const players = Object.values(room.players).filter((player) => player.connected);
-  return players.length >= room.minPlayers && players.every((player) => player.ready);
+  return players.length >= room.minPlayers && players.every((player) => player.userId === room.hostUserId || player.ready);
 };
 
 const hasAllConnectedPlayersSubmitted = (room: RoomState): boolean => {

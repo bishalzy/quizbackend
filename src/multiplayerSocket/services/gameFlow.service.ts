@@ -208,14 +208,17 @@ const resolveQuestion = async (roomCode: string, questionIndex: number, reason: 
       correctAnswer: question.correct_answer,
       scores: getScoreBoard(finishedRoom),
     });
-    broadcastToRoom(roomCode, 'game:ended', {
-      roomCode,
-      finalScores: getScoreBoard(finishedRoom),
-      winners: Object.values(finishedRoom.players)
-        .sort((left, right) => right.score - left.score)
-        .slice(0, 1)
-        .map((player) => ({ userId: player.userId, username: player.username, score: player.score })),
-    });
+    
+    setTimeout(() => {
+      broadcastToRoom(roomCode, 'game:ended', {
+        roomCode,
+        finalScores: getScoreBoard(finishedRoom),
+        winners: Object.values(finishedRoom.players)
+          .sort((left, right) => right.score - left.score)
+          .slice(0, 1)
+          .map((player) => ({ userId: player.userId, username: player.username, score: player.score })),
+      });
+    }, 5000);
     return;
   }
 
