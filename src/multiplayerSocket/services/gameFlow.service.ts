@@ -30,12 +30,23 @@ const toPublicQuestion = (question: Question): MultiplayerQuestion => ({
   incorrect_answers: question.incorrect_answers,
 });
 
+const shuffleArray = <T,>(arr: T[]): T[] => {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = shuffled[i]!;
+    shuffled[i] = shuffled[j]!;
+    shuffled[j] = tmp;
+  }
+  return shuffled;
+};
+
 const toVisibleQuestion = (question: MultiplayerQuestion) => ({
   type: question.type,
   difficulty: question.difficulty,
   category: question.category,
   question: question.question,
-  incorrect_answers: question.incorrect_answers,
+  options: shuffleArray([...question.incorrect_answers, question.correct_answer]),
 });
 
 const getScoreBoard = (room: RoomState): Record<string, number> => {
@@ -134,7 +145,7 @@ const submitAnswer = async (roomCode: string, userId: number, answer: string): P
 };
 
 const resolveQuestion = async (roomCode: string, questionIndex: number, reason: 'timeout' | 'all-answered'): Promise<void> => {
-  clearRoomTimer(roomCode);
+  await clearRoomTimer(roomCode);
 
   const room = await getRoom(roomCode);
   if (!room || room.phase !== 'active') {
@@ -208,15 +219,19 @@ const resolveQuestion = async (roomCode: string, questionIndex: number, reason: 
     return;
   }
 
-  const updatedRoom = await advanceQuestionIndex(roomCode);
   broadcastToRoom(roomCode, 'game:result', {
     roomCode,
     questionIndex,
     reason,
     correctAnswer: question.correct_answer,
-    scores: getScoreBoard(updatedRoom),
+    scores: getScoreBoard(room),
   });
-  void broadcastCurrentQuestion(roomCode);
+
+  setTimeout(() => {
+    advanceQuestionIndex(roomCode).then(() => {
+      void broadcastCurrentQuestion(roomCode);
+    }).catch(console.error);
+  }, 5000);
 };
 
 // register timer handler to resolve question on timeout

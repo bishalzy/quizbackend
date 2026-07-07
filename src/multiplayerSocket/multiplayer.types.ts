@@ -73,7 +73,7 @@ export interface PublicQuestionState {
   difficulty: 'easy' | 'medium' | 'hard';
   category: string;
   question: string;
-  incorrect_answers: string[];
+  options: string[];
 }
 
 export interface PublicRoomState extends RoomSettings {

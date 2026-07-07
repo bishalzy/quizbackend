@@ -27,7 +27,7 @@ import {
   saveRoom,
   setPlayerReady,
 } from './services/roomStore.service.js';
-import { bindSocketToRoom, getSocketContext, registerSocket, removeSocket, sendSocketEvent } from './services/socketRegistry.service.js';
+import { bindSocketToRoom, broadcastToRoom, getSocketContext, registerSocket, removeSocket, sendSocketEvent } from './services/socketRegistry.service.js';
 import { startGame, submitAnswer } from './services/gameFlow.service.js';
 
 const parseCookies = (cookieHeader: string | undefined): Record<string, string> => {
@@ -117,7 +117,7 @@ const handleClientMessage = async (socket: WebSocket, identity: SocketUserIdenti
       const room = await joinRoom(payload.roomCode, identity);
       bindSocketToRoom(socket, room.roomCode);
       sendSocketEvent(socket, 'room:joined', { room: publicRoom(room) });
-      sendSocketEvent(socket, 'room:updated', { room: publicRoom(room) });
+      broadcastToRoom(room.roomCode, 'room:updated', { room: publicRoom(room) });
       break;
     }
 
@@ -125,7 +125,7 @@ const handleClientMessage = async (socket: WebSocket, identity: SocketUserIdenti
       const payload = message.payload as ReadyRoomPayload;
       const room = await setPlayerReady(payload.roomCode, identity.userId, payload.ready);
       bindSocketToRoom(socket, room.roomCode);
-      sendSocketEvent(socket, 'room:updated', { room: publicRoom(room) });
+      broadcastToRoom(room.roomCode, 'room:updated', { room: publicRoom(room) });
       break;
     }
 
@@ -138,10 +138,9 @@ const handleClientMessage = async (socket: WebSocket, identity: SocketUserIdenti
 
       const room = await leaveRoom(roomCode, identity.userId);
       if (room) {
-        sendSocketEvent(socket, 'room:updated', { room: publicRoom(room) });
-      } else {
-        sendSocketEvent(socket, 'room:updated', { roomCode });
+        broadcastToRoom(roomCode, 'room:updated', { room: publicRoom(room) });
       }
+      sendSocketEvent(socket, 'room:left', { roomCode });
       break;
     }
 
@@ -188,7 +187,7 @@ const handleClientMessage = async (socket: WebSocket, identity: SocketUserIdenti
       const payload = message.payload as SubmitAnswerPayload;
       const room = await submitAnswer(payload.roomCode, identity.userId, payload.answer);
       bindSocketToRoom(socket, room.roomCode);
-      sendSocketEvent(socket, 'room:updated', { room: publicRoom(room) });
+      sendSocketEvent(socket, 'game:answer:ack', { roomCode: room.roomCode });
       break;
     }
 
@@ -248,6 +247,10 @@ const handleSocketConnection = async (socket: WebSocket, req: IncomingMessage): 
     const context = getSocketContext(socket);
     if (context?.roomCode) {
       await markPlayerDisconnected(context.roomCode, context.userId);
+      const room = await getRoom(context.roomCode);
+      if (room) {
+        broadcastToRoom(context.roomCode, 'room:updated', { room: publicRoom(room) });
+      }
     }
     removeSocket(socket);
   });

@@ -56,12 +56,21 @@ const publicQuestionFromRoom = (room: RoomState): PublicRoomState['currentQuesti
     return null;
   }
 
+  const options = [...question.incorrect_answers, question.correct_answer];
+  // Deterministic shuffle per question index so reconnecting clients see the same order
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = options[i]!;
+    options[i] = options[j]!;
+    options[j] = tmp;
+  }
+
   return {
     type: question.type,
     difficulty: question.difficulty,
     category: question.category,
     question: question.question,
-    incorrect_answers: question.incorrect_answers,
+    options,
   };
 };
 

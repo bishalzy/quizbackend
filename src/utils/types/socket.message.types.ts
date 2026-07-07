@@ -11,11 +11,13 @@ export type ClientSocketEvent =
 export type ServerSocketEvent =
   | 'room:created'
   | 'room:joined'
+  | 'room:left'
   | 'room:state'
   | 'room:updated'
   | 'game:started'
   | 'game:question'
   | 'game:result'
+  | 'game:answer:ack'
   | 'game:ended'
   | 'error'
   | 'pong';
